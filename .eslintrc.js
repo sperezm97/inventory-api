@@ -27,5 +27,11 @@ module.exports = {
   },
   rules: {
     'import/no-unresolved': 'error',
+    '@typescript-eslint/no-misused-promises': [
+      'error',
+      {
+        checksVoidReturn: false,
+      },
+    ],
   },
 };
