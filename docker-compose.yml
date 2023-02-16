@@ -8,7 +8,7 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
     ports:
-      - '5432:5432'
+      - '5432:${DB_PORT}'
     volumes:
       - db:/var/lib/postgresql/data
   api:
@@ -20,7 +20,7 @@ services:
     depends_on:
       - db
     ports:
-      - 3000:3000
+      - ${PORT}:${PORT}
     environment:
       NODE_ENV: ${ENV}
       DB_HOST: ${DB_HOST}
@@ -29,6 +29,8 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
     links:
+      - db
+    external_links:
       - db
     volumes:
       - './:/code'
