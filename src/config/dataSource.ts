@@ -1,5 +1,11 @@
 import { DataSource } from 'typeorm';
-import { InventoryType } from '../models';
+import {
+  InventoryType,
+  Item,
+  Transactions,
+  StockPerStorage,
+  Storage,
+} from '../models';
 
 const AppDataSource = new DataSource({
   type: 'postgres',
