@@ -3,12 +3,7 @@ module.exports = {
     es2021: true,
     node: true,
   },
-  extends: [
-    'standard-with-typescript',
-    'prettier',
-    'airbnb-base',
-    'airbnb-typescript/base',
-  ],
+  extends: ['standard-with-typescript', 'prettier', 'airbnb-base', 'airbnb-typescript/base'],
   overrides: [],
   parserOptions: {
     project: './tsconfig.json',
@@ -33,5 +28,30 @@ module.exports = {
         checksVoidReturn: false,
       },
     ],
+    '@typescript-eslint/indent': 0,
+    '@typescript-eslint/comma-dangle': [
+      'error',
+      {
+        functions: 'never',
+        objects: 'always-multiline',
+        imports: 'always-multiline',
+      },
+    ],
+    'object-curly-newline': [
+      'error',
+      {
+        ObjectExpression: 'always',
+        ObjectPattern: { multiline: true },
+        ImportDeclaration: { multiline: true, minProperties: 6 },
+        ExportDeclaration: { multiline: true, minProperties: 6 },
+      },
+    ],
+    'max-len': [
+      1,
+      {
+        code: 120,
+      },
+    ],
+    'import/no-cycle': 0,
   },
 };
