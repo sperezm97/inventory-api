@@ -8,56 +8,59 @@ export const getAllInventoryTypes = async (): Promise<InventoryType[]> => {
 };
 
 export const createInventoryType = async (
-  body: Pick<InventoryType, 'description' | 'account' | 'status'>,
+  body: Pick<InventoryType, 'description' | 'account' | 'status'>
 ): Promise<InventoryType> => {
   const InventoryTypeRepository = AppDataSource.getRepository(InventoryType);
 
   return InventoryTypeRepository.save(body);
 };
 
-export const getInventoryTypeById = async (
-  id: number,
-): Promise<InventoryType | null> => {
+export const getInventoryTypeById = async (id: number): Promise<InventoryType> => {
   const InventoryTypeRepository = AppDataSource.getRepository(InventoryType);
 
-  return InventoryTypeRepository.findOne({
+  const inventoryType = await InventoryTypeRepository.findOne({
     where: {
       id,
     },
   });
+
+  if (inventoryType === null) {
+    throw new Error('InventoryType nopt found');
+  }
+
+  return inventoryType;
 };
 
 export const putInventoryTypeById = async (
   id: number,
-  payload: Partial<InventoryType>,
+  payload: Partial<InventoryType>
 ): Promise<InventoryType | null> => {
   const InventoryTypeRepository = AppDataSource.getRepository(InventoryType);
 
-  const inventory = await InventoryTypeRepository.findOne({
+  const inventoryType = await InventoryTypeRepository.findOne({
     where: {
       id,
     },
   });
-  if (inventory == null) {
-    return null;
+  if (inventoryType === null) {
+    throw new Error('inventoryType not found');
   }
-  inventory.account = payload?.account ?? inventory.account;
-  inventory.description = payload?.description ?? inventory.description;
+  inventoryType.account = payload?.account ?? inventoryType.account;
+  inventoryType.description = payload?.description ?? inventoryType.description;
 
-  return InventoryTypeRepository.save(inventory);
+  return InventoryTypeRepository.save(inventoryType);
 };
 
-export const deleteInventoryTypeById = async (
-  id: number,
-): Promise<InventoryType | null> => {
+export const deleteInventoryTypeById = async (id: number): Promise<InventoryType | null> => {
   const InventoryTypeRepository = AppDataSource.getRepository(InventoryType);
-  const inventory = await InventoryTypeRepository.findOne({
+  const inventoryType = await InventoryTypeRepository.findOne({
     where: {
       id,
     },
   });
-  if (inventory == null) {
-    return null;
+  if (inventoryType == null) {
+    throw new Error('inventoryType not found');
   }
-  return InventoryTypeRepository.remove(inventory);
+
+  return InventoryTypeRepository.remove(inventoryType);
 };

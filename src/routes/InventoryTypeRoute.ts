@@ -19,28 +19,33 @@ router.post('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
-
-  const response = await InventoryTypeController.getOneInventoryType(
-    Number(id),
-  );
-  res.send(response);
+  try {
+    const response = await InventoryTypeController.getOneInventoryType(Number(id));
+    res.send(response);
+  } catch (error) {
+    res.send(404).json(error);
+  }
 });
 
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const { body } = req;
-  const response = await InventoryTypeController.updateOneInventoryType(
-    Number(id),
-    body,
-  );
-  res.send(response);
+  try {
+    const response = await InventoryTypeController.updateOneInventoryType(Number(id), body);
+    res.send(response);
+  } catch (error) {
+    res.send(404).json(error);
+  }
 });
+
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
-  const response = await InventoryTypeController.removeOneInventoryType(
-    Number(id),
-  );
-  res.send(response);
+  try {
+    const response = await InventoryTypeController.removeOneInventoryType(Number(id));
+    res.send(response);
+  } catch (error) {
+    res.send(404).json(error);
+  }
 });
 
 export default router;
