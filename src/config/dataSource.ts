@@ -1,11 +1,5 @@
 import { DataSource } from 'typeorm';
-import {
-  InventoryType,
-  Item,
-  Transactions,
-  StockPerStorage,
-  Storage,
-} from '../models';
+import { InventoryType, Item, Transaction, StockPerStorage, Storage } from '../models';
 
 const AppDataSource = new DataSource({
   type: 'postgres',
@@ -16,7 +10,7 @@ const AppDataSource = new DataSource({
   database: process.env.DB_NAME,
   synchronize: true,
   logging: false,
-  entities: [InventoryType, Transactions, Item, Storage, StockPerStorage],
+  entities: [InventoryType, Transaction, Item, Storage, StockPerStorage],
   subscribers: [],
   migrations: [],
 });
