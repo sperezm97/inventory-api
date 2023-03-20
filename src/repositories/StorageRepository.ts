@@ -7,28 +7,13 @@ export const getAllStorages = async (): Promise<Storage[]> => {
   return StorageRepository.find();
 };
 
-export const createStorage = async (
-  body: Pick<Storage, 'description' | 'status'>,
-): Promise<Storage> => {
+export const createStorage = async (body: Pick<Storage, 'description' | 'status'>): Promise<Storage> => {
   const StorageRepository = AppDataSource.getRepository(Storage);
 
   return StorageRepository.save(body);
 };
 
-export const getStorageById = async (id: number): Promise<Storage | null> => {
-  const StorageRepository = AppDataSource.getRepository(Storage);
-
-  return StorageRepository.findOne({
-    where: {
-      id,
-    },
-  });
-};
-
-export const putStorageById = async (
-  id: number,
-  payload: Partial<Storage>,
-): Promise<Storage | null> => {
+export const getStorageById = async (id: number): Promise<Storage> => {
   const StorageRepository = AppDataSource.getRepository(Storage);
 
   const storage = await StorageRepository.findOne({
@@ -36,8 +21,24 @@ export const putStorageById = async (
       id,
     },
   });
-  if (storage == null) {
-    return null;
+
+  if (storage === null) {
+    throw new Error('Storage not found');
+  }
+
+  return storage;
+};
+
+export const putStorageById = async (id: number, payload: Partial<Storage>): Promise<Storage> => {
+  const StorageRepository = AppDataSource.getRepository(Storage);
+
+  const storage = await StorageRepository.findOne({
+    where: {
+      id,
+    },
+  });
+  if (storage === null) {
+    throw new Error('Storage not found');
   }
   storage.status = payload?.status ?? storage.status;
   storage.description = payload?.description ?? storage.description;
@@ -45,17 +46,15 @@ export const putStorageById = async (
   return StorageRepository.save(storage);
 };
 
-export const deleteStorageById = async (
-  id: number,
-): Promise<Storage | null> => {
+export const deleteStorageById = async (id: number): Promise<Storage> => {
   const StorageRepository = AppDataSource.getRepository(Storage);
   const storage = await StorageRepository.findOne({
     where: {
       id,
     },
   });
-  if (storage == null) {
-    return null;
+  if (storage === null) {
+    throw new Error('Storage not found');
   }
   return StorageRepository.remove(storage);
 };

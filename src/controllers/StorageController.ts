@@ -1,5 +1,5 @@
 import {
-  Body, Delete, Get, Path, Post, Put, Route, Tags,
+ Body, Delete, Get, Path, Post, Put, Route, Tags,
 } from 'tsoa';
 import { type Storage } from '../models';
 import {
@@ -19,9 +19,7 @@ export default class StorageController {
   }
 
   @Post('/')
-  static async createOneStorage(
-    @Body() body: Pick<Storage, 'description' | 'status'>,
-  ): Promise<Storage | null> {
+  static async createOneStorage(@Body() body: Pick<Storage, 'description' | 'status'>): Promise<Storage | null> {
     return createStorage(body);
   }
 
@@ -31,10 +29,7 @@ export default class StorageController {
   }
 
   @Put('{id}')
-  static async updateOneStorage(
-    @Path() id: number,
-      @Body() payload: Partial<Storage>,
-  ): Promise<Storage | null> {
+  static async updateOneStorage(@Path() id: number, @Body() payload: Partial<Storage>): Promise<Storage | null> {
     return putStorageById(id, payload);
   }
 

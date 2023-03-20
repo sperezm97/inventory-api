@@ -1,5 +1,5 @@
 import express from 'express';
-import StorageController from '../controllers/StorageRepository';
+import StorageController from '../controllers/StorageController';
 
 const router = express.Router();
 
@@ -19,22 +19,34 @@ router.post('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
-
-  const response = await StorageController.getOneStorage(Number(id));
-  res.send(response);
+  try {
+    const response = await StorageController.getOneStorage(Number(id));
+    res.send(response);
+  } catch (error) {
+    res.status(404).json(error);
+  }
 });
 
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const { body } = req;
-  const response = await StorageController.updateOneStorage(Number(id), body);
-  res.send(response);
+  try {
+    const response = await StorageController.updateOneStorage(Number(id), body);
+    res.send(response);
+  } catch (error) {
+    res.status(404).json(error);
+  }
 });
 
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
-  const response = await StorageController.removeOneStorage(Number(id));
-  res.send(response);
+
+  try {
+    const response = await StorageController.removeOneStorage(Number(id));
+    res.send(response);
+  } catch (error) {
+    res.status(404).json(error);
+  }
 });
 
 export default router;
