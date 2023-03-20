@@ -1,6 +1,5 @@
 import AppDataSource from '../config/dataSource';
-import { Item } from '../models';
-import Transaction from '../models/Transaction';
+import { Item, Transaction } from '../models';
 
 export const getAllTransaction = async (): Promise<Transaction[]> => {
   const TransactionRepository = AppDataSource.getRepository(Transaction);

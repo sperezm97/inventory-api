@@ -1,5 +1,5 @@
 import express from 'express';
-import StorageController from '../controllers/StorageController';
+import { StorageController } from '../controllers';
 
 const router = express.Router();
 

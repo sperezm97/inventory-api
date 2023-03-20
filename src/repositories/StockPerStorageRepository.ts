@@ -1,6 +1,5 @@
 import AppDataSource from '../config/dataSource';
-import { Item, Storage } from '../models';
-import StockPerStorage from '../models/StockPerStorage';
+import { Item, Storage, StockPerStorage } from '../models';
 
 export const createStockPerStorage = async (
   body: Pick<StockPerStorage, 'quantity'> & {

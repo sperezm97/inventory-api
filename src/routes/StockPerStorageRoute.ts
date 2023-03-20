@@ -1,5 +1,5 @@
 import express from 'express';
-import StockPerStorageController from '../controllers/StockPerStorageController';
+import { StockPerStorageController } from '../controllers';
 
 const router = express.Router();
 

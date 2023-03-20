@@ -32,9 +32,11 @@ module.exports = {
     '@typescript-eslint/comma-dangle': [
       'error',
       {
+        arrays: 'never',
         functions: 'never',
         objects: 'always-multiline',
         imports: 'always-multiline',
+        exports: 'only-multiline',
       },
     ],
     'object-curly-newline': [

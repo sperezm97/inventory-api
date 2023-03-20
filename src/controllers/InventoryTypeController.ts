@@ -1,5 +1,5 @@
 import {
-  Body, Delete, Get, Path, Post, Put, Route, Tags,
+ Body, Delete, Get, Path, Post, Put, Route, Tags,
 } from 'tsoa';
 import { type InventoryType } from '../models';
 import {
@@ -20,30 +20,26 @@ export default class InventoryTypeController {
 
   @Post('/')
   static async createOneInventoryType(
-    @Body() body: Pick<InventoryType, 'description' | 'account' | 'status'>,
+    @Body() body: Pick<InventoryType, 'description' | 'account' | 'status'>
   ): Promise<InventoryType | null> {
     return createInventoryType(body);
   }
 
   @Get('{id}')
-  static async getOneInventoryType(
-    @Path() id: number,
-  ): Promise<InventoryType | null> {
+  static async getOneInventoryType(@Path() id: number): Promise<InventoryType | null> {
     return getInventoryTypeById(id);
   }
 
   @Put('{id}')
   static async updateOneInventoryType(
     @Path() id: number,
-      @Body() payload: Partial<InventoryType>,
+    @Body() payload: Partial<InventoryType>
   ): Promise<InventoryType | null> {
     return putInventoryTypeById(id, payload);
   }
 
   @Delete('{id}')
-  static async removeOneInventoryType(
-    @Path() id: number,
-  ): Promise<InventoryType | null> {
+  static async removeOneInventoryType(@Path() id: number): Promise<InventoryType | null> {
     return deleteInventoryTypeById(id);
   }
 }

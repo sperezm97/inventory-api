@@ -1,5 +1,5 @@
 import AppDataSource from '../config/dataSource';
-import InventoryType from '../models/InventoryType';
+import { InventoryType } from '../models';
 
 export const getAllInventoryTypes = async (): Promise<InventoryType[]> => {
   const InventoryTypeRepository = AppDataSource.getRepository(InventoryType);
