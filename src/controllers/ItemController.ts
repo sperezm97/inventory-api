@@ -15,7 +15,7 @@ export default class ItemController {
   @Post('/')
   static async createOneItem(
     @Body()
-    body: Pick<Item, 'description' | 'stock' | 'unitPrice' | 'status'> & {
+    body: Pick<Item, 'description' | 'unitPrice' | 'status'> & {
       inventoryId: number;
     }
   ): Promise<Item | null> {
@@ -28,7 +28,13 @@ export default class ItemController {
   }
 
   @Put('{id}')
-  static async updateOneItem(@Path() id: number, @Body() payload: Partial<Item>): Promise<Item | null> {
+  static async updateOneItem(
+    @Path() id: number,
+    @Body()
+    payload: Pick<Item, 'description' | 'unitPrice' | 'status'> & {
+      inventoryId: number;
+    }
+  ): Promise<Item | null> {
     return putItemById(id, payload);
   }
 

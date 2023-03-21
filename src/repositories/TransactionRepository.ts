@@ -1,5 +1,5 @@
 import AppDataSource from '../config/dataSource';
-import { Item, Transaction } from '../models';
+import { Item, Transaction, Storage } from '../models';
 
 export const getAllTransaction = async (): Promise<Transaction[]> => {
   const TransactionRepository = AppDataSource.getRepository(Transaction);
@@ -8,12 +8,13 @@ export const getAllTransaction = async (): Promise<Transaction[]> => {
 };
 
 export const createTransaction = async (
-  body: Pick<Transaction, 'transactionType' | 'quantity' | 'cost'> & {
+  body: Pick<Transaction, 'transactionType' | 'quantity'> & {
     itemId: number;
+    storageId: number;
   }
 ): Promise<Transaction> => {
   const TransactionRepository = AppDataSource.getRepository(Transaction);
-  const { itemId, ...rest } = body;
+  const { itemId, storageId, ...rest } = body;
 
   const ItemRepository = AppDataSource.getRepository(Item);
 
@@ -27,9 +28,22 @@ export const createTransaction = async (
     throw new Error('Item not found');
   }
 
+  const StorageRepository = AppDataSource.getRepository(Storage);
+
+  const storage = await StorageRepository.findOne({
+    where: {
+      id: storageId,
+    },
+  });
+
+  if (storage === null) {
+    throw new Error('Storage not found');
+  }
+
   return TransactionRepository.save({
     ...rest,
     item,
+    storage,
   });
 };
 

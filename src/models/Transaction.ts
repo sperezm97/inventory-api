@@ -3,11 +3,12 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import Item from './Item';
+import Storage from './Storage';
 
 @Entity()
 export default class Transaction {
@@ -16,10 +17,6 @@ export default class Transaction {
 
   @Column()
   transactionType!: 'entry' | 'departure' | 'transfer' | 'adjustment';
-
-  @OneToOne(() => Item)
-  @JoinColumn()
-  item!: Item;
 
   @Column()
   quantity!: number;
@@ -32,4 +29,12 @@ export default class Transaction {
 
   @UpdateDateColumn()
   updatedAt!: Date;
+
+  @ManyToOne(() => Storage, (storage) => storage.transaction)
+  @JoinColumn()
+  storage!: Storage;
+
+  @ManyToOne(() => Item, (item) => item.transactionPerItem)
+  @JoinColumn()
+  item!: Item;
 }

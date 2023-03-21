@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import InventoryType from './InventoryType';
 import StockPerStorage from './StockPerStorage';
+import Transaction from './Transaction';
 
 @Entity()
 export default class Item {
@@ -39,4 +40,7 @@ export default class Item {
 
   @OneToMany(() => StockPerStorage, (stock) => stock.item)
   stockPerStorage!: StockPerStorage[];
+
+  @OneToMany(() => Transaction, (transaction) => transaction.item)
+  transactionPerItem!: Transaction[];
 }

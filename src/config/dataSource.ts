@@ -1,5 +1,6 @@
 import { DataSource } from 'typeorm';
 import { InventoryType, Item, Transaction, StockPerStorage, Storage } from '../models';
+import { TransactionSubscriber } from '../subscribers';
 
 const AppDataSource = new DataSource({
   type: 'postgres',
@@ -11,7 +12,7 @@ const AppDataSource = new DataSource({
   synchronize: true,
   logging: false,
   entities: [InventoryType, Transaction, Item, Storage, StockPerStorage],
-  subscribers: [],
+  subscribers: [TransactionSubscriber],
   migrations: [],
 });
 

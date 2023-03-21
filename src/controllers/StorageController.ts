@@ -29,7 +29,10 @@ export default class StorageController {
   }
 
   @Put('{id}')
-  static async updateOneStorage(@Path() id: number, @Body() payload: Partial<Storage>): Promise<Storage | null> {
+  static async updateOneStorage(
+    @Path() id: number,
+    @Body() payload: Pick<Storage, 'description' | 'status'>
+  ): Promise<Storage | null> {
     return putStorageById(id, payload);
   }
 

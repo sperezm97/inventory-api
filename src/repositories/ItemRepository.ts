@@ -8,7 +8,7 @@ export const getAllItems = async (): Promise<Item[]> => {
 };
 
 export const createItem = async (
-  body: Pick<Item, 'description' | 'stock' | 'unitPrice' | 'status'> & {
+  body: Pick<Item, 'description' | 'unitPrice' | 'status'> & {
     inventoryId: number;
   }
 ): Promise<Item> => {
@@ -28,6 +28,7 @@ export const createItem = async (
   const item = {
     ...rest,
     inventoryType,
+    stock: 0,
   };
 
   return ItemRepository.save(item);

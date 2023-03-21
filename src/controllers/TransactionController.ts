@@ -21,28 +21,33 @@ export default class TransactionController {
   @Post('/')
   static async createOneTransaction(
     @Body()
-    body: Pick<Transaction, 'transactionType' | 'quantity' | 'cost'> & {
+    body: Pick<Transaction, 'transactionType' | 'quantity'> & {
       itemId: number;
+      storageId: number;
     }
-  ): Promise<Transaction | null> {
+  ): Promise<Transaction> {
     return createTransaction(body);
   }
 
   @Get('{id}')
-  static async getOneTransaction(@Path() id: number): Promise<Transaction | null> {
+  static async getOneTransaction(@Path() id: number): Promise<Transaction> {
     return getTransactionById(id);
   }
 
   @Put('{id}')
   static async updateOneTransaction(
     @Path() id: number,
-    @Body() payload: Partial<Transaction>
-  ): Promise<Transaction | null> {
+    @Body()
+    payload: Pick<Transaction, 'transactionType' | 'quantity'> & {
+      itemId: number;
+      storageId: number;
+    }
+  ): Promise<Transaction> {
     return putTransactionById(id, payload);
   }
 
   @Delete('{id}')
-  static async removeOneTransaction(@Path() id: number): Promise<Transaction | null> {
+  static async removeOneTransaction(@Path() id: number): Promise<Transaction> {
     return deleteTransactionById(id);
   }
 }
