@@ -1,5 +1,6 @@
 import express from 'express';
 import { ItemController } from '../controllers';
+import { itemCreateSchema, itemUpdatedSchema, requiredId, validate } from '../helpers/validations';
 
 const router = express.Router();
 
@@ -9,7 +10,7 @@ router.get('/', async (req, res) => {
   res.send(response);
 });
 
-router.post('/', async (req, res) => {
+router.post('/', validate(itemCreateSchema), async (req, res) => {
   const { body } = req;
 
   const response = await ItemController.createOneItem(body);
@@ -17,7 +18,7 @@ router.post('/', async (req, res) => {
   res.send(response);
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', validate(requiredId), async (req, res) => {
   const { id } = req.params;
   try {
     const response = await ItemController.getOneItem(Number(id));
@@ -27,7 +28,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', validate(itemUpdatedSchema), async (req, res) => {
   const { id } = req.params;
   const { body } = req;
   try {
@@ -38,7 +39,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', validate(requiredId), async (req, res) => {
   const { id } = req.params;
   try {
     const response = await ItemController.removeOneItem(Number(id));

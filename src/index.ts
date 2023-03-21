@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
+import cors from 'cors';
 import AppDataSource from './config/dataSource';
 import routes from './routes';
 
@@ -15,7 +16,11 @@ const app: Express = express();
 
 app.use(helmet());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
 app.use(morgan('tiny'));
 app.use(express.static('public'));
 app.use(
@@ -25,7 +30,20 @@ app.use(
     swaggerOptions: {
       url: '/swagger.json',
     },
-  }),
+  })
+);
+
+const whitelist = ['http://localhost:3000', 'http://localhost:3001'];
+app.use(
+  cors({
+    origin: (origin, cb) => {
+      if (origin != null && whitelist.includes(origin)) {
+        cb(null, true);
+      } else {
+        cb(new Error('Not allowed by CORS'));
+      }
+    },
+  })
 );
 
 app.get('/', (req: Request, res: Response) => {
