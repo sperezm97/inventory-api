@@ -4,38 +4,56 @@ import { requiredId, transactionCreateSchema, transactionUpdatedSchema, validate
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
-  const response = await TransactionController.getAllTransactions();
-
-  res.send(response);
+router.get('/', async (req, res, next) => {
+  try {
+    const response = await TransactionController.getAllTransactions();
+    res.send(response);
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.post('/', validate(transactionCreateSchema), async (req, res) => {
+router.post('/', validate(transactionCreateSchema), async (req, res, next) => {
   const { body } = req;
 
-  const response = await TransactionController.createOneTransaction(body);
+  try {
+    const response = await TransactionController.createOneTransaction(body);
 
-  res.send(response);
+    res.send(response);
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.get('/:id', validate(requiredId), async (req, res) => {
+router.get('/:id', validate(requiredId), async (req, res, next) => {
   const { id } = req.params;
-
-  const response = await TransactionController.getOneTransaction(Number(id));
-  res.send(response);
+  try {
+    const response = await TransactionController.getOneTransaction(Number(id));
+    res.send(response);
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.put('/:id', validate(transactionUpdatedSchema), async (req, res) => {
+router.put('/:id', validate(transactionUpdatedSchema), async (req, res, next) => {
   const { id } = req.params;
   const { body } = req;
-  const response = await TransactionController.updateOneTransaction(Number(id), body);
-  res.send(response);
+  try {
+    const response = await TransactionController.updateOneTransaction(Number(id), body);
+    res.send(response);
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.delete('/:id', validate(requiredId), async (req, res) => {
+router.delete('/:id', validate(requiredId), async (req, res, next) => {
   const { id } = req.params;
-  const response = await TransactionController.removeOneTransaction(Number(id));
-  res.send(response);
+  try {
+    const response = await TransactionController.removeOneTransaction(Number(id));
+    res.send(response);
+  } catch (error) {
+    next(error);
+  }
 });
 
 export default router;

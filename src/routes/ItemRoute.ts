@@ -4,48 +4,56 @@ import { itemCreateSchema, itemUpdatedSchema, requiredId, validate } from '../he
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
   const response = await ItemController.getAllItems();
 
-  res.send(response);
+  try {
+    res.send(response);
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.post('/', validate(itemCreateSchema), async (req, res) => {
+router.post('/', validate(itemCreateSchema), async (req, res, next) => {
   const { body } = req;
 
   const response = await ItemController.createOneItem(body);
 
-  res.send(response);
+  try {
+    res.send(response);
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.get('/:id', validate(requiredId), async (req, res) => {
+router.get('/:id', validate(requiredId), async (req, res, next) => {
   const { id } = req.params;
   try {
     const response = await ItemController.getOneItem(Number(id));
     res.send(response);
   } catch (error) {
-    res.status(404).json(error);
+    next(error);
   }
 });
 
-router.put('/:id', validate(itemUpdatedSchema), async (req, res) => {
+router.put('/:id', validate(itemUpdatedSchema), async (req, res, next) => {
   const { id } = req.params;
   const { body } = req;
   try {
     const response = await ItemController.updateOneItem(Number(id), body);
     res.send(response);
   } catch (error) {
-    res.status(404).json(error);
+    next(error);
   }
 });
 
-router.delete('/:id', validate(requiredId), async (req, res) => {
+router.delete('/:id', validate(requiredId), async (req, res, next) => {
   const { id } = req.params;
   try {
     const response = await ItemController.removeOneItem(Number(id));
     res.send(response);
   } catch (error) {
-    res.status(404).json(error);
+    next(error);
   }
 });
 

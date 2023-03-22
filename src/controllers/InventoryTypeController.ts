@@ -27,7 +27,8 @@ export default class InventoryTypeController {
 
   @Get('{id}')
   static async getOneInventoryType(@Path() id: number): Promise<InventoryType | null> {
-    return getInventoryTypeById(id);
+    const inventory = await getInventoryTypeById(id);
+    return inventory;
   }
 
   @Put('{id}')

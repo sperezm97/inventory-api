@@ -15,7 +15,7 @@ export const createInventoryType = async (
   return InventoryTypeRepository.save(body);
 };
 
-export const getInventoryTypeById = async (id: number): Promise<InventoryType> => {
+export const getInventoryTypeById = async (id: number): Promise<InventoryType | null> => {
   const InventoryTypeRepository = AppDataSource.getRepository(InventoryType);
 
   const inventoryType = await InventoryTypeRepository.findOne({
@@ -25,7 +25,7 @@ export const getInventoryTypeById = async (id: number): Promise<InventoryType> =
   });
 
   if (inventoryType === null) {
-    throw new Error('InventoryType nopt found');
+    throw new Error('InventoryType not found');
   }
 
   return inventoryType;
@@ -43,7 +43,7 @@ export const putInventoryTypeById = async (
     },
   });
   if (inventoryType === null) {
-    throw new Error('inventoryType not found');
+    throw new Error('InventoryType not found');
   }
   inventoryType.account = payload?.account ?? inventoryType.account;
   inventoryType.description = payload?.description ?? inventoryType.description;
@@ -59,7 +59,7 @@ export const deleteInventoryTypeById = async (id: number): Promise<InventoryType
     },
   });
   if (inventoryType == null) {
-    throw new Error('inventoryType not found');
+    throw new Error('InventoryType not found');
   }
 
   return InventoryTypeRepository.remove(inventoryType);

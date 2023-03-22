@@ -1,10 +1,17 @@
 import AppDataSource from '../config/dataSource';
+import { AppError, HttpCode } from '../helpers/HttpException';
 import { InventoryType, Item } from '../models';
 
 export const getAllItems = async (): Promise<Item[]> => {
   const ItemRepository = AppDataSource.getRepository(Item);
-
-  return ItemRepository.find();
+  try {
+    return await ItemRepository.find();
+  } catch (error) {
+    throw new AppError({
+      httpCode: HttpCode.INTERNAL_SERVER_ERROR,
+      description: 'Internal Server Error',
+    });
+  }
 };
 
 export const createItem = async (
@@ -23,7 +30,10 @@ export const createItem = async (
   });
 
   if (inventoryType === null) {
-    throw new Error('Inventory does not exist');
+    throw new AppError({
+      httpCode: HttpCode.NOT_FOUND,
+      description: 'Inventory Not Found',
+    });
   }
   const item = {
     ...rest,
@@ -31,7 +41,14 @@ export const createItem = async (
     stock: 0,
   };
 
-  return ItemRepository.save(item);
+  try {
+    return await ItemRepository.save(item);
+  } catch (error) {
+    throw new AppError({
+      httpCode: HttpCode.INTERNAL_SERVER_ERROR,
+      description: 'Internal Server Error',
+    });
+  }
 };
 
 export const getItemById = async (id: number): Promise<Item> => {
@@ -44,7 +61,10 @@ export const getItemById = async (id: number): Promise<Item> => {
   });
 
   if (item === null) {
-    throw new Error('Item not found');
+    throw new AppError({
+      httpCode: HttpCode.NOT_FOUND,
+      description: 'Item Not Found',
+    });
   }
   return item;
 };
@@ -61,12 +81,22 @@ export const putItemById = async (id: number, payload: Partial<Item>): Promise<I
     },
   });
   if (item === null) {
-    throw new Error('Item not found');
+    throw new AppError({
+      httpCode: HttpCode.NOT_FOUND,
+      description: 'Item Not Found',
+    });
   }
   item.status = payload?.status ?? item.status;
   item.description = payload?.description ?? item.description;
 
-  return ItemRepository.save(item);
+  try {
+    return await ItemRepository.save(item);
+  } catch (error) {
+    throw new AppError({
+      httpCode: HttpCode.INTERNAL_SERVER_ERROR,
+      description: 'Internal Server Error',
+    });
+  }
 };
 
 export const deleteItemById = async (id: number): Promise<Item> => {
@@ -77,7 +107,17 @@ export const deleteItemById = async (id: number): Promise<Item> => {
     },
   });
   if (item === null) {
-    throw new Error('Item not found');
+    throw new AppError({
+      httpCode: HttpCode.NOT_FOUND,
+      description: 'Item Not Found',
+    });
   }
-  return ItemRepository.remove(item);
+  try {
+    return await ItemRepository.remove(item);
+  } catch (error) {
+    throw new AppError({
+      httpCode: HttpCode.INTERNAL_SERVER_ERROR,
+      description: 'Internal Server Error',
+    });
+  }
 };

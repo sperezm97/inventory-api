@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import express, { type Express, type Request, type Response } from 'express';
+import express, { type Express } from 'express';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
@@ -8,6 +8,7 @@ import swaggerUi from 'swagger-ui-express';
 import cors from 'cors';
 import AppDataSource from './config/dataSource';
 import routes from './routes';
+import { errorMiddleware } from './middlewares/errorMiddleware';
 
 dotenv.config();
 
@@ -33,22 +34,16 @@ app.use(
   })
 );
 
-const whitelist = ['http://localhost:3000', 'http://localhost:3001'];
 app.use(
   cors({
-    origin: (origin, cb) => {
-      if (origin != null && whitelist.includes(origin)) {
-        cb(null, true);
-      } else {
-        cb(new Error('Not allowed by CORS'));
-      }
-    },
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
   })
 );
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('<h1>Hello from the TypeScript world!</h1>');
-});
+app.use(errorMiddleware);
 
 app.use(routes);
 

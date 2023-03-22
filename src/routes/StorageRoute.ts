@@ -4,49 +4,55 @@ import { requiredId, storageCreateSchema, storageUpdatedSchema, validate } from 
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
-  const response = await StorageController.getAllStorages();
-
-  res.send(response);
+router.get('/', async (req, res, next) => {
+  try {
+    const response = await StorageController.getAllStorages();
+    res.send(response);
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.post('/', validate(storageCreateSchema), async (req, res) => {
+router.post('/', validate(storageCreateSchema), async (req, res, next) => {
   const { body } = req;
 
-  const response = await StorageController.createOneStorage(body);
-
-  res.send(response);
+  try {
+    const response = await StorageController.createOneStorage(body);
+    res.send(response);
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.get('/:id', validate(requiredId), async (req, res) => {
+router.get('/:id', validate(requiredId), async (req, res, next) => {
   const { id } = req.params;
   try {
     const response = await StorageController.getOneStorage(Number(id));
     res.send(response);
   } catch (error) {
-    res.status(404).json(error);
+    next(error);
   }
 });
 
-router.put('/:id', validate(storageUpdatedSchema), async (req, res) => {
+router.put('/:id', validate(storageUpdatedSchema), async (req, res, next) => {
   const { id } = req.params;
   const { body } = req;
   try {
     const response = await StorageController.updateOneStorage(Number(id), body);
     res.send(response);
   } catch (error) {
-    res.status(404).json(error);
+    next(error);
   }
 });
 
-router.delete('/:id', validate(requiredId), async (req, res) => {
+router.delete('/:id', validate(requiredId), async (req, res, next) => {
   const { id } = req.params;
 
   try {
     const response = await StorageController.removeOneStorage(Number(id));
     res.send(response);
   } catch (error) {
-    res.status(404).json(error);
+    next(error);
   }
 });
 

@@ -55,5 +55,6 @@ module.exports = {
       },
     ],
     'import/no-cycle': 0,
+    'class-methods-use-this': ['error', { exceptMethods: ['listenTo', 'afterInsert'] }],
   },
 };
